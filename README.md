@@ -1,8 +1,8 @@
-## spring-boot-hibernate-bidirectional-many-to-one-relationship-mapping
+## spring-boot-hibernate-unidirectional-many-to-many-join-table-relationship-mapping
 
-1- Implement hibernate unidirectional many-to-many relational mapping <br/>
+1- Implement hibernate unidirectional many-to-many join-table relational mapping <br/>
 2- ER diagram :  <br/>
-NOT : Many Product related to many Store entity <br/>
+NOT : Many Product related to many Store <br/>
 
 ![many_to_one_er_diagram](doc/store_products_er_diagram.png) <br/>
 
@@ -29,23 +29,28 @@ datasource-proxy <br/>
 
 
 ## API OPERATIONS
-### Save customer sucessfully to database
+### Save store with products sucessfully to database
 
 Method : HTTP.POST <br/>
-URL : localhost:8080/customer-info/customer/save <br/>
+URL : http://localhost:8080/customer-info/store/save <br/>
 
 Request : 
 <pre>
-curl --location --request POST 'localhost:8080/customer-info/customer/save' \
+curl --location --request POST 'http://localhost:8080/customer-info/store/save' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "name": "name1",
-    "age": 1,
-    "shippingAddress": {
-        "streetName": "software",
-        "city": "ankara",
-        "country": "TR"
+  "name": "jeans_store",
+  "products": [
+    {
+      "name": "prod1"
+    },
+    {
+      "name": "prod2"
+    },
+    {
+      "name": "prod3"
     }
+  ]
 }'
 </pre><br/>
 
@@ -55,91 +60,33 @@ HTTP response code 200 <br/>
 <pre>
 {
     "id": 1,
-    "name": "name1",
-    "age": 1,
-    "shippingAddress": {
-        "id": 1,
-        "streetName": "software",
-        "city": "ankara",
-        "country": "TR"
-    }
-}
-</pre>
-
-### Create a new CustomerOrder with many OrderItems for Customer id = 1.
-
-Method : HTTP.POST <br/>
-URL : localhost:8080/customer-info/customerorder/save <br/>
-
-Request : 
-<pre>
-curl --location --request POST 'localhost:8080/customer-info/customerorder/save' \
---header 'Content-Type: application/json' \
---data-raw '{
-  "customer": {
-    "age": 0,
-    "id": 1,
-    "name": "string",
-    "shippingAddress": {
-      "city": "string",
-      "country": "string",
-      "id": 1,
-      "streetName": "string"
-    }
-  },
-  "orderDate": "2021-05-05T16:00:35.350Z",
-  "orderItems": [
-    {
-      "quantity": 1
-    },
-    {
-      "quantity": 2
-    }
-  ],
-  "title": "string"
-}'
-</pre><br/>
-
-Response : 
-
-HTTP response code 200 <br/>
-<pre>
-{
-    "id": 1,
-    "orderDate": "2021-05-05T16:00:35.35",
-    "customer": {
-        "id": 1,
-        "name": "string",
-        "age": 0,
-        "shippingAddress": {
-            "id": 1,
-            "streetName": "string",
-            "city": "string",
-            "country": "string"
-        }
-    },
-    "title": "string",
-    "orderItems": [
+    "name": "jeans_store",
+    "products": [
         {
             "id": 1,
-            "quantity": 1
+            "name": "prod3"
         },
         {
             "id": 2,
-            "quantity": 2
+            "name": "prod1"
+        },
+        {
+            "id": 3,
+            "name": "prod2"
         }
     ]
 }
-</pre><br/>
+</pre>
 
-### List OrderItems saved to database
+
+### List Store saved to database
 
 Method : HTTP.GET <br/>
-URL : localhost:8080/customer-info/orderitem/list <br/>
+URL : http://localhost:8080/customer-info/store/list <br/>
 
 Request : 
 <pre>
-curl --location --request GET 'localhost:8080/customer-info/orderitem/list'
+curl --location --request GET 'http://localhost:8080/customer-info/store/list'
 </pre><br/>
 
 Response : 
@@ -149,11 +96,21 @@ HTTP response code 200 <br/>
 [
     {
         "id": 1,
-        "quantity": 1
-    },
-    {
-        "id": 2,
-        "quantity": 2
+        "name": "jeans_store",
+        "products": [
+            {
+                "id": 1,
+                "name": "prod3"
+            },
+            {
+                "id": 2,
+                "name": "prod1"
+            },
+            {
+                "id": 3,
+                "name": "prod2"
+            }
+        ]
     }
 ]
 </pre><br/>
