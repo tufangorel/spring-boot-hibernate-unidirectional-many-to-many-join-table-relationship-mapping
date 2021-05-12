@@ -1,0 +1,53 @@
+package com.company.customerinfo.model;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "store")
+public class Store implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "store_id")
+    private Integer id;
+
+    @Column
+    private String name;
+
+    @ManyToMany( cascade = {CascadeType.ALL} )
+    @JoinTable(name = "store_product",
+            joinColumns = { @JoinColumn(name = "store_id") },
+            inverseJoinColumns = { @JoinColumn(name = "product_id") })
+    private Set<Product> products = new HashSet<>();
+
+    public void addProduct( Product product ) {
+        products.add(product);
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
+    }
+}
